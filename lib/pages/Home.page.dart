@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -28,7 +28,13 @@ class HomePage extends GetView<HomeController> {
 
     return Obx(
       () => Scaffold(
-        body: ctrl.stage.value == Stages.home ? primeraVista() : vistaJuego(),
+        backgroundColor: Color.fromARGB(255, 24, 24, 24),
+        body: ctrl.stage.value == Stages.home
+            ? Padding(
+                padding: const EdgeInsets.all(20),
+                child: primeraVista(),
+              )
+            : vistaJuego(),
       ),
     );
   }
@@ -36,169 +42,227 @@ class HomePage extends GetView<HomeController> {
   Widget primeraVista() {
     HomeController ctrl = Get.find();
 
-    return Column(
-      children: [
-        const Text("Piedra, Papel o Muerte"),
-        const SizedBox(height: 100),
-        TextField(
-          onChanged: (value) => ctrl.nombreJugador = value,
-          decoration: const InputDecoration(hintText: "Tu nombre"),
-        ),
-        Obx(
-          () => OutlinedButton(
-            onPressed:
-                ctrl.nombreJugador != "" ? () => {ctrl.empezarJuego()} : null,
-            style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.all(20),
+    return Center(
+      child: SizedBox(
+        width: Get.width / 1.5,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              "Piedra, Papel o Muerte",
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
-            child: const Text(
-              "Jugar",
-              style: TextStyle(fontSize: 20),
+            const SizedBox(height: 50),
+            TextField(
+              onChanged: (value) => ctrl.nombreJugador = value,
+              decoration:
+                  const InputDecoration(hintText: "Coloca aqui tu nombre..."),
             ),
-          ),
+            const SizedBox(height: 20),
+            Obx(
+              () => TextButton(
+                onPressed: ctrl.nombreJugador != ""
+                    ? () => {ctrl.empezarJuego()}
+                    : null,
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.all(20),
+                ),
+                child: const Text(
+                  "Jugar",
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
   Widget vistaJuego() {
     HomeController ctrl = Get.find();
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const Text("Piedra, Papel o Muerte"),
-        Obx(
-          () => filaJugadores(ctrl.stage.value),
-        ),
-        Obx(
-          () => filaBotones(ctrl.stage.value),
-        )
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Expanded(
+            flex: 2,
+            child: Center(
+              child: Text(
+                "Piedra, Papel o Muerte",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 35),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 8,
+            child: Obx(
+              () => filaJugadores(ctrl.stage.value),
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: Obx(
+              () => filaBotones(ctrl.stage.value),
+            ),
+          )
+        ],
+      ),
     );
   }
 
   Widget filaBotones(Stages stage) {
     HomeController ctrl = Get.find();
-
-    Widget body;
-
+    List<Widget> listaBodyColumn = [];
+    TextStyle styleTexto =
+        const TextStyle(fontWeight: FontWeight.bold, fontSize: 23);
     switch (stage) {
       case Stages.eleccion:
-        body = Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            OutlinedButton(
-              onPressed: () => {ctrl.elegirJugada(Elecciones.piedra.name)},
-              style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.all(20),
-              ),
-              child: const Text(
-                "Piedra",
-                style: TextStyle(fontSize: 20),
-              ),
+        listaBodyColumn = [
+          Container(
+            child: const Text(
+              "Tu turno",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 23),
             ),
-            OutlinedButton(
-              onPressed: () => {ctrl.elegirJugada(Elecciones.papel.name)},
-              style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.all(20),
+          ),
+          const SizedBox(height: 40),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              OutlinedButton(
+                onPressed: () => {ctrl.elegirJugada(Elecciones.piedra.name)},
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.all(20),
+                ),
+                child: const Text(
+                  "Piedra",
+                  style: TextStyle(fontSize: 20),
+                ),
               ),
-              child: const Text(
-                "Papel",
-                style: TextStyle(fontSize: 20),
+              OutlinedButton(
+                onPressed: () => {ctrl.elegirJugada(Elecciones.papel.name)},
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.all(20),
+                ),
+                child: const Text(
+                  "Papel",
+                  style: TextStyle(fontSize: 20),
+                ),
               ),
-            ),
-            OutlinedButton(
-              onPressed: () => {ctrl.elegirJugada(Elecciones.tijeras.name)},
-              style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.all(20),
+              OutlinedButton(
+                onPressed: () => {ctrl.elegirJugada(Elecciones.tijeras.name)},
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.all(20),
+                ),
+                child: const Text(
+                  "Tijeras",
+                  style: TextStyle(fontSize: 20),
+                ),
               ),
-              child: const Text(
-                "Tijeras",
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-          ],
-        );
+            ],
+          ),
+        ];
       case Stages.confirmacion:
-        body = Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text("Estas seguro de tu eleccion?"),
+        listaBodyColumn = [
+          Text(
+            "Estas seguro de tu eleccion?",
+            style: styleTexto,
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              OutlinedButton(
+                onPressed: () => {ctrl.confirmarJugada(false)},
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.all(20),
+                ),
+                child: const Text(
+                  "Cancelar",
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+              OutlinedButton(
+                onPressed: () => {ctrl.confirmarJugada(true)},
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.all(20),
+                ),
+                child: const Text(
+                  "Confirmar",
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+            ],
+          ),
+        ];
+      case Stages.resultado:
+        if (ctrl.resultado == Resultados.victoria ||
+            ctrl.resultado == Resultados.empate) {
+          listaBodyColumn = [
+            Text(
+              "Revancha? o eres un cagon?",
+              style: styleTexto,
+            ),
+            const SizedBox(height: 40),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 OutlinedButton(
-                  onPressed: () => {ctrl.confirmarJugada(false)},
+                  onPressed: () => {ctrl.revancha(false)},
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.all(20),
                   ),
                   child: const Text(
-                    "Cancelar",
+                    "No",
                     style: TextStyle(fontSize: 20),
                   ),
                 ),
                 OutlinedButton(
-                  onPressed: () => {ctrl.confirmarJugada(true)},
+                  onPressed: () => {ctrl.revancha(true)},
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.all(20),
                   ),
                   child: const Text(
-                    "Confirmar",
+                    "Si",
                     style: TextStyle(fontSize: 20),
                   ),
                 ),
               ],
             ),
-          ],
-        );
-      case Stages.resultado:
-        if (ctrl.resultado == Resultados.victoria ||
-            ctrl.resultado == Resultados.empate) {
-          body = Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text("Revancha? o eres un cagon?"),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  OutlinedButton(
-                    onPressed: () => {ctrl.revancha(false)},
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.all(20),
-                    ),
-                    child: const Text(
-                      "No",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-                  OutlinedButton(
-                    onPressed: () => {ctrl.revancha(true)},
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.all(20),
-                    ),
-                    child: const Text(
-                      "Si",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          );
+          ];
         } else {
-          body = const SizedBox(
-            height: 100,
-          );
+          listaBodyColumn = [
+            const SizedBox(
+              height: 100,
+            )
+          ];
         }
       default:
-        body = const SizedBox(
-          height: 100,
-        );
+        listaBodyColumn = [
+          const SizedBox(
+            height: 100,
+          )
+        ];
     }
 
-    return body;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: listaBodyColumn,
+    );
   }
 
   Obx filaJugadores(Stages stage) {
@@ -206,47 +270,74 @@ class HomePage extends GetView<HomeController> {
 
     return Obx(
       () => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Column(
-            children: [
-              Text(ctrl.nombreJugador),
-              SizedBox(
-                width: 500,
-                height: 500,
-                child: ctrl.eleccionJugador == ""
-                    ? const Center(
-                        child: Icon(Icons.question_mark_rounded),
-                      )
-                    : Image(
-                        image: AssetImage('assets/${ctrl.eleccionJugador}.png'),
-                      ),
-              )
-            ],
-          ),
-          SizedBox(
-            child: Text(
-              textoCentro(stage),
-              textAlign: TextAlign.center,
+          playerCard(ctrl.nombreJugador, ctrl.eleccionJugador),
+          Expanded(
+            flex: 2,
+            child: SizedBox(
+              width: 200,
+              child: Text(
+                textoCentro(stage),
+                textAlign: TextAlign.center,
+              ),
             ),
-            width: 200,
           ),
-          Column(
-            children: [
-              Text(ctrl.nombrePc),
-              SizedBox(
-                width: 500,
-                height: 500,
-                child: ctrl.eleccionPc == ""
-                    ? const Center(
-                        child: Icon(Icons.question_mark_rounded),
-                      )
-                    : Image(
-                        image: AssetImage('assets/${ctrl.eleccionPc}.png'),
-                      ),
-              )
-            ],
-          ),
+          playerCard(ctrl.nombrePc, ctrl.eleccionPc)
         ],
+      ),
+    );
+  }
+
+  Widget playerCard(String nombreJugador, String eleccionJugador) {
+    return Expanded(
+      flex: 4,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        constraints: const BoxConstraints(minHeight: 300, maxHeight: 300),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              flex: 2,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.redAccent,
+                ),
+                child: Center(
+                  child: Text(
+                    nombreJugador,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              flex: 10,
+              child: eleccionJugador == ""
+                  ? const Center(
+                      child: Icon(Icons.question_mark_rounded),
+                    )
+                  : Container(
+                      constraints: const BoxConstraints(maxWidth: 600),
+                      child: Image(
+                        image: AssetImage('assets/$eleccionJugador.png'),
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -307,7 +398,7 @@ class HomeController extends GetxController {
     int counterTime = 0;
     int counterEleccion = 0;
 
-    Timer.periodic(Duration(milliseconds: 50), (timer) {
+    Timer.periodic(const Duration(milliseconds: 50), (timer) {
       if (counterTime >= 30) {
         terminarRonda();
         timer.cancel();

@@ -28,7 +28,7 @@ class HomePage extends GetView<HomeController> {
 
     return Obx(
       () => Scaffold(
-        backgroundColor: Color.fromARGB(255, 24, 24, 24),
+        backgroundColor: const Color.fromARGB(255, 24, 24, 24),
         body: ctrl.stage.value == Stages.home
             ? Padding(
                 padding: const EdgeInsets.all(20),
@@ -57,23 +57,50 @@ class HomePage extends GetView<HomeController> {
               ),
             ),
             const SizedBox(height: 50),
-            TextField(
-              onChanged: (value) => ctrl.nombreJugador = value,
-              decoration:
-                  const InputDecoration(hintText: "Coloca aqui tu nombre..."),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(80),
+                color: const Color.fromARGB(66, 255, 255, 255),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              child: TextField(
+                onChanged: (value) => ctrl.nombreJugador = value,
+                cursorColor: Colors.white,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+                decoration: const InputDecoration(
+                  hintText: "Coloca aqui tu nombre...",
+                  border: InputBorder.none,
+                  constraints: BoxConstraints(maxHeight: 50, maxWidth: 300),
+                  fillColor: Colors.red,
+                  focusColor: Colors.red,
+                  hintStyle: TextStyle(
+                    color: Colors.white38,
+                  ),
+                ),
+              ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             Obx(
               () => TextButton(
                 onPressed: ctrl.nombreJugador != ""
                     ? () => {ctrl.empezarJuego()}
                     : null,
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.all(20),
+                style: TextButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  backgroundColor: Colors.redAccent,
+                  foregroundColor: Colors.white,
+                  disabledBackgroundColor: Color.fromARGB(85, 255, 82, 82),
+                  disabledForegroundColor: Colors.white54,
                 ),
                 child: const Text(
                   "Jugar",
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
                 ),
               ),
             ),
@@ -124,46 +151,59 @@ class HomePage extends GetView<HomeController> {
   Widget filaBotones(Stages stage) {
     HomeController ctrl = Get.find();
     List<Widget> listaBodyColumn = [];
-    TextStyle styleTexto =
-        const TextStyle(fontWeight: FontWeight.bold, fontSize: 23);
+    TextStyle styleTexto = const TextStyle(
+        fontWeight: FontWeight.bold, fontSize: 23, color: Colors.white);
     switch (stage) {
       case Stages.eleccion:
         listaBodyColumn = [
-          Container(
-            child: const Text(
-              "Tu turno",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 23),
-            ),
+          Text(
+            "Tu turno",
+            style: styleTexto,
           ),
           const SizedBox(height: 40),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              OutlinedButton(
+              TextButton(
                 onPressed: () => {ctrl.elegirJugada(Elecciones.piedra.name)},
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.all(20),
+                style: TextButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  backgroundColor: Colors.redAccent,
+                  foregroundColor: Colors.white,
+                  disabledBackgroundColor: Color.fromARGB(85, 255, 82, 82),
+                  disabledForegroundColor: Colors.white54,
                 ),
                 child: const Text(
                   "Piedra",
                   style: TextStyle(fontSize: 20),
                 ),
               ),
-              OutlinedButton(
+              TextButton(
                 onPressed: () => {ctrl.elegirJugada(Elecciones.papel.name)},
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.all(20),
+                style: TextButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  backgroundColor: Colors.redAccent,
+                  foregroundColor: Colors.white,
+                  disabledBackgroundColor: Color.fromARGB(85, 255, 82, 82),
+                  disabledForegroundColor: Colors.white54,
                 ),
                 child: const Text(
                   "Papel",
                   style: TextStyle(fontSize: 20),
                 ),
               ),
-              OutlinedButton(
+              TextButton(
                 onPressed: () => {ctrl.elegirJugada(Elecciones.tijeras.name)},
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.all(20),
+                style: TextButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  backgroundColor: Colors.redAccent,
+                  foregroundColor: Colors.white,
+                  disabledBackgroundColor: Color.fromARGB(85, 255, 82, 82),
+                  disabledForegroundColor: Colors.white54,
                 ),
                 child: const Text(
                   "Tijeras",
@@ -185,20 +225,28 @@ class HomePage extends GetView<HomeController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              OutlinedButton(
+              TextButton(
                 onPressed: () => {ctrl.confirmarJugada(false)},
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.all(20),
+                style: TextButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                  disabledBackgroundColor: Color.fromARGB(84, 245, 0, 0),
+                  disabledForegroundColor: Colors.white54,
                 ),
                 child: const Text(
                   "Cancelar",
                   style: TextStyle(fontSize: 20),
                 ),
               ),
-              OutlinedButton(
+              TextButton(
                 onPressed: () => {ctrl.confirmarJugada(true)},
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.all(20),
+                style: TextButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  backgroundColor: Color.fromARGB(255, 51, 163, 75),
+                  foregroundColor: Colors.white,
                 ),
                 child: const Text(
                   "Confirmar",
@@ -220,20 +268,28 @@ class HomePage extends GetView<HomeController> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                OutlinedButton(
+                TextButton(
                   onPressed: () => {ctrl.revancha(false)},
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.all(20),
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40, vertical: 15),
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                    disabledBackgroundColor: Color.fromARGB(84, 245, 0, 0),
+                    disabledForegroundColor: Colors.white54,
                   ),
                   child: const Text(
                     "No",
                     style: TextStyle(fontSize: 20),
                   ),
                 ),
-                OutlinedButton(
+                TextButton(
                   onPressed: () => {ctrl.revancha(true)},
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.all(20),
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40, vertical: 15),
+                    backgroundColor: Color.fromARGB(255, 51, 163, 75),
+                    foregroundColor: Colors.white,
                   ),
                   child: const Text(
                     "Si",
@@ -278,8 +334,9 @@ class HomePage extends GetView<HomeController> {
             child: SizedBox(
               width: 200,
               child: Text(
-                textoCentro(stage),
+                "VS",
                 textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white, fontSize: 20),
               ),
             ),
           ),
@@ -312,7 +369,7 @@ class HomePage extends GetView<HomeController> {
                 child: Center(
                   child: Text(
                     nombreJugador,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
